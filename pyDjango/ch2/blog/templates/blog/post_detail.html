@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}post_detail.html{% endblock %}
+{% block content %}
     <h2>{{ object.title }}</h2>
     <p class = "other_posts">
         {% if object.get_previous_by_modify_date %}
@@ -23,5 +19,18 @@
     <div class = "body">
         {{ object.content|linebreaks }}
     </div>
-</body>
-</html>
+    <div>
+        <b>TAGS: </b>
+        {% load tagging_tags %}
+        {% tags_for_object object as tags %}
+        {% for tag in tags %}
+        <a href = "{% url 'blog:tagged_object_list' tag.name %}">{{tag.name}}</a>
+        {% endfor %}
+        <a href = "{% url 'blog:tag_cloud' %}"><i>[ TagCloud ]</i></a>
+    </div>
+    <br/>
+    <div>
+        {% load disqus_tags %}
+        {% disqus_show_comments %}
+    </div>
+{% endblock %}
